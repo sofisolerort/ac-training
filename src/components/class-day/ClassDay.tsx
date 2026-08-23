@@ -11,7 +11,7 @@ type Props = {
 
 export default function ClassDay({ studentId, dayId }: Props) {
   const { session } = useAuth();
-  const { day, weekNumber, items, setItems, loading } = useClassDay(
+  const { day, weekNumber, month, items, setItems, loading } = useClassDay(
     studentId,
     dayId,
   );
@@ -79,7 +79,7 @@ export default function ClassDay({ studentId, dayId }: Props) {
         Día {day.number}
         {day.name ? ` — ${day.name}` : ""}
       </h1>
-      <p className="text-primary font-semibold mb-5">Semana {weekNumber}</p>
+      <p className="text-primary font-semibold mb-5">Mes {month} · Semana {weekNumber}</p>
 
       {items.length === 0 && (
         <div className="bg-surface border border-outline-variant rounded-2xl p-8 text-center animate-fade-in-up">

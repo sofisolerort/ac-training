@@ -8,11 +8,12 @@ export function useClassDay(
 ) {
   const [day, setDay] = useState<Day | null>(null);
   const [weekNumber, setWeekNumber] = useState<number | null>(null);
+  const [month, setMonth] = useState<number | null>(null);
   const [items, setItems] = useState<ClassExercise[]>([]);
   const [loading, setLoading] = useState(true);
-  const [allWeeks, setAllWeeks] = useState<{ id: string; number: number }[]>(
-    [],
-  );
+  const [allWeeks, setAllWeeks] = useState<
+    { id: string; number: number; month: number }[]
+  >([]);
   const [allDays, setAllDays] = useState<Day[]>([]);
 
   const fetchClass = useCallback(async () => {
@@ -40,7 +41,7 @@ export function useClassDay(
     // 2) Semanas, días, ejercicios y logs (todo de una)
     const { data: weeks } = await supabase
       .from("weeks")
-      .select("id, number")
+      .select("id, number, month")
       .eq("plan_id", plan.id)
       .order("number");
     const weekIds = (weeks ?? []).map((w) => w.id);
@@ -116,7 +117,17 @@ export function useClassDay(
 
     const todayWeekNumber = weekNumberById[today.week_id];
     setDay(today);
-    setWeekNumber(todayWeekNumber);
+
+    // Número de semana DENTRO del mes (para que coincida con los chips)
+    const todayWeek = (weeks ?? []).find((w) => w.id === today.week_id);
+    const todayMonth = todayWeek?.month ?? 1;
+    const weeksOfMonth = (weeks ?? [])
+      .filter((w) => w.month === todayMonth)
+      .sort((a, b) => a.number - b.number);
+    const weekInMonth =
+      weeksOfMonth.findIndex((w) => w.id === today.week_id) + 1;
+    setMonth(todayMonth);
+    setWeekNumber(weekInMonth);
 
     // 4) Para cada ejercicio de hoy: su log + el peso de la semana pasada
     const prevWeek = (weeks ?? []).find(
@@ -158,6 +169,7 @@ export function useClassDay(
   return {
     day,
     weekNumber,
+    month,
     items,
     setItems,
     loading,

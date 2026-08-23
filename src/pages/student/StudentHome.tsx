@@ -7,7 +7,7 @@ import BottomNav from "../../components/bottom-nav/BottomNav";
 export default function StudentHome() {
   const { session } = useAuth();
   const navigate = useNavigate();
-  const { day, weekNumber, items, loading } = useClassDay(session?.user.id);
+  const { day, weekNumber, month, items, loading } = useClassDay(session?.user.id);
 
   const completos = items.filter((i) => i.status === "done").length;
   const progreso = items.length > 0 ? (completos / items.length) * 100 : 0;
@@ -44,7 +44,7 @@ export default function StudentHome() {
               {day.name ? ` — ${day.name}` : ""}
             </h2>
             <p className="text-on-surface-variant mt-1">
-              Semana {weekNumber} · {items.length} ejercicios
+              Mes {month} · Semana {weekNumber} · {items.length} ejercicios
             </p>
 
             {/* Barra de progreso */}

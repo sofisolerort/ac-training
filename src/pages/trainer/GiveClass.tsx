@@ -16,7 +16,7 @@ export default function GiveClass() {
   // día forzado por el selector (si es undefined, se usa el "hoy" automático)
   const [forcedDayId, setForcedDayId] = useState<string | undefined>(undefined);
 
-  const { day, weekNumber, items, setItems, loading, weeks, days, refetch } =
+  const { day, weekNumber, month, items, setItems, loading, weeks, days, refetch } =
     useClassDay(studentId, forcedDayId);
 
   // Guarda (o actualiza) el registro de un ejercicio
@@ -147,7 +147,13 @@ export default function GiveClass() {
                     : "bg-surface text-on-surface-variant border-outline-variant"
                 }`}
             >
-              Sem {w.number}
+              {(() => {
+                const wm = weeks
+                  .filter((x) => x.month === w.month)
+                  .sort((a, b) => a.number - b.number);
+                const idx = wm.findIndex((x) => x.id === w.id) + 1;
+                return `M${w.month}·S${idx}`;
+              })()}
             </button>
           ))}
         </div>
@@ -175,7 +181,9 @@ export default function GiveClass() {
           Día {day.number}
           {day.name ? ` — ${day.name}` : ""}
         </h1>
-        <p className="text-primary font-semibold mb-5">Semana {weekNumber}</p>
+        <p className="text-primary font-semibold mb-5">
+          Mes {month} · Semana {weekNumber}
+        </p>
 
         {items.length === 0 && (
           <div className="bg-surface border border-outline-variant rounded-2xl p-8 text-center animate-fade-in-up">

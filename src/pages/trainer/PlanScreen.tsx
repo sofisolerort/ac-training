@@ -169,6 +169,57 @@ export default function PlanScreen() {
     setBusy(false);
   };
 
+  const borrarMes = async () => {
+    if (!plan || selectedMonth === null) return;
+    const ok = await confirm({
+      title: `Borrar Mes ${selectedMonth}`,
+      message:
+        "Se eliminan TODAS las semanas, días, ejercicios y registros de este mes. Esta acción no se puede deshacer.",
+      confirmLabel: "Borrar mes",
+      danger: true,
+    });
+    if (!ok) return;
+
+    setBusy(true);
+    const { error } = await supabase
+      .from("weeks")
+      .delete()
+      .eq("plan_id", plan.id)
+      .eq("month", selectedMonth);
+    if (error) {
+      await alerta("No se pudo borrar: " + error.message);
+      setBusy(false);
+      return;
+    }
+    setSelectedMonth(null);
+    setSelectedWeekId(null);
+    await refetch();
+    setBusy(false);
+  };
+
+  const borrarPlan = async () => {
+    if (!plan) return;
+    const ok = await confirm({
+      title: "Borrar plan completo",
+      message:
+        "Se borra TODO el plan: meses, semanas, días, ejercicios y registros. Esta acción no se puede deshacer.",
+      confirmLabel: "Borrar plan",
+      danger: true,
+    });
+    if (!ok) return;
+    setBusy(true);
+    const { error } = await supabase.from("plans").delete().eq("id", plan.id);
+    if (error) {
+      await alerta("No se pudo borrar: " + error.message);
+      setBusy(false);
+      return;
+    }
+    setSelectedMonth(null);
+    setSelectedWeekId(null);
+    await refetch();
+    setBusy(false);
+  };
+
   const agregarDia = async () => {
     if (!selectedWeekId) return;
     setBusy(true);
@@ -375,10 +426,33 @@ export default function PlanScreen() {
                   </span>
                   Borrar esta semana
                 </button>
+
+                <button
+                  onClick={borrarMes}
+                  disabled={busy}
+                  className="w-full py-3 rounded-xl text-error/80 font-medium mt-1 inline-flex items-center justify-center gap-1 transition hover:bg-error/10 active:scale-[0.98]"
+                >
+                  <span className="material-symbols-outlined text-lg">
+                    delete_sweep
+                  </span>
+                  Borrar mes completo
+                </button>
               </>
             )}
           </>
         )}
+
+        {/* Borrar plan entero */}
+        <div className="mt-8 pt-4 border-t border-outline-variant">
+          <button
+            onClick={borrarPlan}
+            disabled={busy}
+            className="w-full py-3 rounded-xl text-error/70 text-sm font-medium inline-flex items-center justify-center gap-1 transition hover:bg-error/10 active:scale-[0.98]"
+          >
+            <span className="material-symbols-outlined text-lg">delete_forever</span>
+            Borrar plan completo
+          </button>
+        </div>
       </div>
       {dialog}
     </div>
