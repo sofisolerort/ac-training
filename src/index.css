@@ -1,0 +1,137 @@
+@import "tailwindcss";
+
+/* ===================================================================
+   Kinetic Cobalt — modo claro (por defecto)
+   =================================================================== */
+@theme {
+  --color-primary: #0028c2;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #dee0ff;
+  --color-on-primary-container: #002cce;
+
+  /* neutral azulado (slate) — para chips como "superserie" */
+  --color-secondary: #545f73;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #d5e0f8;
+  --color-on-secondary-container: #3c475a;
+
+  --color-background: #faf8ff;
+  --color-surface: #ffffff;
+  --color-surface-container: #eaedff;
+
+  --color-on-surface: #131b2e;
+  --color-on-surface-variant: #444657;
+
+  --color-outline: #747689;
+  --color-outline-variant: #c4c5da;
+
+  --color-error: #ba1a1a;
+  --color-warning: #9a5300;
+
+  /* badge "Hoy" */
+  --color-info-container: #dee0ff;
+  --color-on-info-container: #002cce;
+
+  --font-sans: "Poppins", system-ui, sans-serif;
+  --font-display: "Poppins", system-ui, sans-serif;
+}
+
+/* ===================================================================
+   Kinetic Cobalt — modo noche (navy cobalto)
+   =================================================================== */
+html.dark {
+  --color-primary: #bbc3ff;
+  --color-on-primary: #001b8f;
+  --color-primary-container: #2a3aa0;
+  --color-on-primary-container: #dee0ff;
+
+  --color-secondary: #bcc7de;
+  --color-on-secondary: #26324a;
+  --color-secondary-container: #3c475a;
+  --color-on-secondary-container: #d8e3fb;
+
+  --color-background: #0f1322;
+  --color-surface: #171b2e;
+  --color-surface-container: #1e2338;
+
+  --color-on-surface: #e3e6f5;
+  --color-on-surface-variant: #c0c5db;
+
+  --color-outline: #8b8fa6;
+  --color-outline-variant: #3a3f57;
+
+  --color-error: #ffb4ab;
+  --color-warning: #f0b357;
+
+  --color-info-container: #2a3aa0;
+  --color-on-info-container: #dee0ff;
+}
+
+/* ===================================================================
+   Base
+   =================================================================== */
+html {
+  background-color: var(--color-background);
+}
+body {
+  color: var(--color-on-surface);
+  font-family: var(--font-sans);
+}
+
+/* Íconos Material Symbols */
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  direction: ltr;
+  vertical-align: middle;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+/* ===================================================================
+   Animaciones
+   =================================================================== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.8); }
+  60% { transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+.animate-fade-in { animation: fadeIn 0.4s ease both; }
+.animate-fade-in-up { animation: fadeInUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-scale-in { animation: scaleIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-pop { animation: popIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-modal { animation: modalIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.animate-backdrop { animation: fadeIn 0.2s ease both; }
+
+/* Respetar la preferencia de "reducir movimiento" */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
